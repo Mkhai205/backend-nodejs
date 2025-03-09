@@ -1,13 +1,14 @@
 const express = require('express');
 const router = express.Router();
 
-const { getHomePage, getSample, getKhaidz } = require('../controllers/homeController');
+const { getHomePage, getForm, postCreateUser, getListUsers } = require('../controllers/homeController');
 
 // router.Method('route', callback)
 
 // GET request to the root URL
 router.get('/', getHomePage);
-router.get('/sample', getSample);
-router.get('/khaidz', getKhaidz);
+router.get('/list-users', getListUsers);
+router.get('/create-user', getForm);
+router.post('/create-user', postCreateUser);
 
 module.exports = router; // export router object

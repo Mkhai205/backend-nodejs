@@ -8,6 +8,10 @@ const configViewEngine = (app) => {
 
     // configure the static files
     app.use(express.static(path.join('./src', 'public')));
+
+    // configure request data
+    app.use(express.urlencoded({ extended: true }));
+    app.use(express.json());
 };
 
 module.exports = configViewEngine; // export the function configViewEngine

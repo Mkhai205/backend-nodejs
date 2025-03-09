@@ -18,14 +18,14 @@ configViewEngine(app);
 // declare route
 app.use('/', webRouter); // use webRouter for all routes
 
-connection.query('SELECT * FROM User', (error, results, fields) => {
-    if (error) throw error;
-    console.log('The solution is: ', results);
-    // console.log('The fields is: ', fields);
+// connection.query('SELECT * FROM Users', (error, results, fields) => {
+//     if (error) throw error;
+//     console.log('The solution is: ', results);
+//     // console.log('The fields is: ', fields);
 
-});
+// });
 
 // GET request to the /about URL
 app.listen(port, hostname, () => {
-    console.log(`Example app listening on port ${port}`);
+    console.log(`App listening on port ${port}`);
 });
