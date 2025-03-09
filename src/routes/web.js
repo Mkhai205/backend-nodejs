@@ -1,17 +1,13 @@
 const express = require('express');
 const router = express.Router();
 
+const { getHomePage, getSample, getKhaidz } = require('../controllers/homeController');
+
+// router.Method('route', callback)
+
 // GET request to the root URL
-router.get('/', (req, res) => {
-    res.send('<h1>Hello World!</h1>')
-});
-
-router.get('/abc', (req, res) => {
-    res.send('Hello, Khaidz hehe!')
-});
-
-router.get('/khaidz', (req, res) => {
-    res.render('sample.ejs')
-});
+router.get('/', getHomePage);
+router.get('/sample', getSample);
+router.get('/khaidz', getKhaidz);
 
 module.exports = router; // export router object
