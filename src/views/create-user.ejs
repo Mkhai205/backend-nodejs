@@ -24,7 +24,7 @@
       </nav>
       <div class="container">
         <h2>Information</h2>
-        <form action="/create-user" method="POST">
+        <form onsubmit="createUser(event)" method="POST">
           <label for="name">Name</label>
           <input type="text" id="name" name="name" placeholder="Enter your name" required />
 
@@ -36,6 +36,32 @@
 
           <button type="submit">Submit</button>
         </form>
+
+        <script>
+          async function createUser(event) {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const city = document.getElementById('city').value;
+            const email = document.getElementById('email').value;
+
+            const response = await fetch('/api/create-user', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ name, city, email }),
+            });
+
+            
+            
+            if (response.ok) {
+              alert('User created successfully');
+              window.location.href = '/list-users';
+            } else {
+              alert('An error occurred');
+            }
+          }
+        </script>
     </section>
   </body>
 </html>

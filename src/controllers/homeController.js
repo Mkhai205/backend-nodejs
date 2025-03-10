@@ -6,34 +6,18 @@ const getHomePage = (req, res) => {
     return res.render('home');
 };
 
-const getForm = (req, res) => {
+const getCreateUserPage = (req, res) => {
     return res.render('create-user');
 };
 
-const getListUsers = async (req, res) => {
-    return res.render('list-users');
-};
+const getListUsersPage = async (req, res) => {
+    const [rows, fields] = await connection.query('SELECT * FROM Users');
 
-const postCreateUser = async (req, res) => {
-    const { email, name, city } = req.body;
-
-    if (!email || !name || !city) {
-        return res.status(400).send('All fields are required.');
-    }
-
-    try {
-        const [rows, fields] = await connection.query('INSERT INTO Users (email, name, city) VALUES (?, ?, ?)', [email, name, city]);
-        console.log('The solution is: ', rows);
-        return res.status(201).send('User created successfully!');
-    } catch (error) {
-        console.error('Database error: ', error);
-        return res.status(500).send('An error occurred while creating the user.');
-    }
+    return res.render('list-users', { data: rows });
 };
 
 module.exports = {
     getHomePage,
-    getForm,
-    postCreateUser,
-    getListUsers
+    getCreateUserPage,
+    getListUsersPage,
 }

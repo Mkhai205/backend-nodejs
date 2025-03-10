@@ -4,6 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>List users</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
     <link rel="stylesheet" href="/css/styles.css" />
     <link rel="stylesheet" href="/css/list-users.css" />
   </head>
@@ -23,40 +30,173 @@
         <a class="link" href="#">Sign up</a>
       </nav>
       <div class="container">
-        <h2>Responsive Tables Using LI <small>Triggers on 767px</small></h2>
+        <h2>Table User Information <small>kaka 205</small></h2>
         <ul class="responsive-table">
           <li class="table-header">
-            <div class="col col-1">Job Id</div>
-            <div class="col col-2">Customer Name</div>
-            <div class="col col-3">Amount Due</div>
-            <div class="col col-4">Payment Status</div>
+            <div class="col col-1">Id</div>
+            <div class="col col-2">Name</div>
+            <div class="col col-3">CIty</div>
+            <div class="col col-4">Email</div>
           </li>
-          <li class="table-row">
-            <div class="col col-1" data-label="Job Id">42235</div>
-            <div class="col col-2" data-label="Customer Name">John Doe</div>
-            <div class="col col-3" data-label="Amount">$350</div>
-            <div class="col col-4" data-label="Payment Status">Pending</div>
+          <% data.reverse().forEach( row => { %>
+          <li class="table-row" data-id="<%= row.id %>">
+            <div class="col col-1"><%= row.id %></div>
+            <div class="col col-2"><%= row.name %></div>
+            <div class="col col-3"><%= row.city %></div>
+            <div class="col col-4"><%= row.email %></div>
           </li>
-          <li class="table-row">
-            <div class="col col-1" data-label="Job Id">42442</div>
-            <div class="col col-2" data-label="Customer Name">Jennifer Smith</div>
-            <div class="col col-3" data-label="Amount">$220</div>
-            <div class="col col-4" data-label="Payment Status">Pending</div>
-          </li>
-          <li class="table-row">
-            <div class="col col-1" data-label="Job Id">42257</div>
-            <div class="col col-2" data-label="Customer Name">John Smith</div>
-            <div class="col col-3" data-label="Amount">$341</div>
-            <div class="col col-4" data-label="Payment Status">Pending</div>
-          </li>
-          <li class="table-row">
-            <div class="col col-1" data-label="Job Id">42311</div>
-            <div class="col col-2" data-label="Customer Name">John Carpenter</div>
-            <div class="col col-3" data-label="Amount">$115</div>
-            <div class="col col-4" data-label="Payment Status">Pending</div>
-          </li>
+          <% } ); %>
         </ul>
+
+        <div class="action-buttons">
+          <button id="editBtn" disabled>Edit</button>
+          <button id="deleteBtn" disabled>Delete</button>
+        </div>
       </div>
     </section>
+
+    <div class="modal js-modal">
+      <div class="modal-container js-modal-container">
+        <div class="modal-close js-modal-close">
+          <i class="fa-solid fa-xmark"></i>
+        </div>
+
+        <header class="modal-header">
+          <i class="fa-solid fa-user-pen"></i>
+          Update User Information
+        </header>
+
+        <div class="modal-body">
+          <label for="form-name" class="modal-label">
+            <i class="fa-solid fa-signature"></i>
+            Name
+          </label>
+          <input id="form-name" type="text" class="modal-input" />
+
+          <label for="form-city" class="modal-label">
+            <i class="fa-solid fa-city"></i>
+            City
+          </label>
+          <input id="form-city" type="text" class="modal-input" />
+
+          <label for="form-email" class="modal-label">
+            <i class="fa-solid fa-envelope"></i>
+            Email
+          </label>
+          <input id="form-email" type="text" class="modal-input" />
+
+          <button id="save-btn">
+            Save
+            <i class="fa-solid fa-check"></i>
+          </button>
+        </div>
+
+        <footer class="modal-footer">
+          <p class="modal-help">
+            Need
+            <a href="">help?</a>
+          </p>
+        </footer>
+      </div>
+    </div>
+
+    <script>
+      const rows = document.querySelectorAll(".table-row");
+      const editBtn = document.getElementById("editBtn");
+      const deleteBtn = document.getElementById("deleteBtn");
+
+      let selectedRow = null;
+
+      const modal = document.querySelector(".js-modal");
+      const modalClose = document.querySelector(".js-modal-close");
+      const modalContainer = document.querySelector(".js-modal-container");
+      const saveBtn = document.getElementById("save-btn");
+
+      function showUpdateUser() {
+        modal.classList.add("modal-open");
+        const name = document.getElementById("form-name");
+        const city = document.getElementById("form-city");
+        const email = document.getElementById("form-email");
+        name.value = selectedRow.children[1].textContent;
+        city.value = selectedRow.children[2].textContent;
+        email.value = selectedRow.children[3].textContent;
+      }
+
+      function hideUpdateUser() {
+        modal.classList.remove("modal-open");
+      }
+
+      modalClose.addEventListener("click", hideUpdateUser);
+
+      modal.addEventListener("click", hideUpdateUser);
+
+      modalContainer.addEventListener("click", function (event) {
+        event.stopPropagation();
+      });
+
+      rows.forEach((row) => {
+        row.addEventListener("click", () => {
+          if (selectedRow) {
+            selectedRow.classList.remove("selected");
+          }
+          row.classList.add("selected");
+          selectedRow = row;
+
+          editBtn.disabled = false;
+          deleteBtn.disabled = false;
+        });
+      });
+
+      editBtn.addEventListener("click", () => {
+        if (selectedRow) {
+          showUpdateUser();
+        }
+      });
+
+      deleteBtn.addEventListener("click", async () => {
+        if (selectedRow) {
+          const response = await fetch(`/api/delete-user/${selectedRow.dataset.id}`, {
+            method: "DELETE",
+          });
+          if(response.ok) {
+            selectedRow.remove();
+            alert(`User ID: ${selectedRow.dataset.id} deleted successfully`);
+          }
+          else {
+            alert("An error occurred");
+          }
+          editBtn.disabled = true;
+          deleteBtn.disabled = true;
+          selectedRow = null;
+        }
+      });
+
+      saveBtn.addEventListener("click", async () => {
+        event.preventDefault();
+        const id = selectedRow.dataset.id;
+        const name = document.getElementById("form-name").value;
+        const city = document.getElementById("form-city").value;
+        const email = document.getElementById("form-email").value;
+
+        const response = await fetch(`/api/update-user/${id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ id, name, city, email }),
+        });
+
+        if (response.ok) {
+          alert(`User ID: ${selectedRow.dataset.id} updated successfully`);
+          hideUpdateUser();
+          const row = document.querySelector(`li[data-id='${id}']`);
+          row.querySelector(".col-2").innerText = name;
+          row.querySelector(".col-3").innerText = city;
+          row.querySelector(".col-4").innerText = email;
+        } else {
+          alert("An error occurred");
+        }
+      });
+    </script>
   </body>
 </html>
